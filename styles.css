@@ -105,7 +105,14 @@ h3 { font-size: 24px; letter-spacing: -.6px; line-height: 1.2; margin-bottom: 12
 .privacy-site-note { color: var(--text); }
 .utility-links { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
 .utility-links a { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; color: var(--violet-light); text-decoration: underline; text-underline-offset: 4px; }
-.placeholder-note { font-size: 12px; }
+.legal-page { max-width: 760px; padding-block: 48px 64px; }
+.legal-page h1 { font-size: clamp(36px, 6vw, 56px); }
+.legal-page section { margin-top: 36px; }
+.legal-page h2 { font-size: 24px; letter-spacing: -.5px; }
+.legal-page p, .legal-page li { color: var(--muted); }
+.legal-page ul { padding-left: 24px; }
+.legal-page li { margin-bottom: 8px; }
+.legal-page a { color: var(--violet-light); text-decoration: underline; text-underline-offset: 4px; }
 .site-footer { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 24px; border-top: 1px solid var(--line); padding-block: 30px 40px; }
 .footer-brand { font-size: 20px; font-weight: 700; letter-spacing: -.5px; }
 .site-footer p { font-size: 11px; color: var(--muted); margin: 4px 0 0; }

@@ -16,7 +16,10 @@ submitted on this site.
 - `styles.css`: responsive dark-first design, fixed violet accents, system fonts,
   keyboard focus and reduced-motion support.
 - `script.js`: **the single configuration point for the beta form URL**, plus
-  optional Privacy Policy/contact URLs. No network calls or persistent storage.
+  Privacy Policy/contact link configuration. No network calls or persistent storage.
+- `privacy.html`: on-device processing, Google Forms beta information, contact
+  and deletion requests, using the shared site styles.
+- `.nojekyll`: direct static hosting on GitHub Pages.
 - `assets/`: approved SnipStik icon, favicon, Apple touch icon and social artwork.
 
 ## Local preview
@@ -32,32 +35,24 @@ directly also works. Python is only a preview convenience, never a deploy requir
 
 ## Configure signup and utility links
 
-Edit **`SITE_CONFIG` at the top of `script.js`**:
+The supplied SnipStik Google Form is configured in **`SITE_CONFIG.betaFormUrl`
+at the top of `script.js`**. To change it, replace that value with the new HTTPS
+form URL. Both “Join the Android Beta” and “Join the Beta” use this one setting and
+open the form in a new tab with `noopener noreferrer`. There is no fake backend
+form. This website does not submit or store responses; configure and administer
+the Google Form separately. Invalid or missing configuration keeps the in-page
+fallback instead of opening an unsafe URL.
 
-```js
-const SITE_CONFIG = Object.freeze({
-  betaFormUrl: "https://forms.gle/YOUR_REAL_FORM_LINK",
-  privacyUrl: "",
-  contactUrl: "",
-});
-```
-
-Replace the existing literal **`BETA_FORM_URL`** with your real HTTPS Google Form
-URL. All beta CTAs update from this one setting. There is no fake backend form.
-With the placeholder or an invalid URL, links stay within the page and the visible
-notice explains that the signup link is coming soon. With a valid URL they open
-the form in a new tab with `noopener noreferrer`. This website does not submit or
-store form responses; configure and administer the Google Form separately.
-
-Set `privacyUrl` to the actual HTTPS policy URL when available. Set `contactUrl`
-to an actual HTTPS contact page or `mailto:` address. Until then, the links point
-to clearly identified in-page placeholders. No legal/contact address is invented.
-These values are public; **never put credentials or private values in this file**.
-Without JavaScript the page remains readable, but outbound configured links need
+Privacy links point to **`./privacy.html`**, and Contact uses
+**`mailto:servinsystems@gmail.com`**. These native links also work without
+JavaScript and under a GitHub Pages project path. If changing these destinations,
+update the configuration and the matching HTML links in both pages so the
+no-JavaScript fallback stays correct. These values are public; **never put
+credentials or private values in this file**. The configured beta CTAs require
 JavaScript; a noscript explanation is included.
 
-Before opening testing, supply the policy/contact links, make sure the signup form
-explains the actual required testing period and feedback process, and review that
+Before opening testing, make sure the signup form explains the actual required
+testing period and feedback process, and review that
 the reward terms match your program. Pro is explicitly a future offering; this
 page makes no claim that Pro or a Play Store public launch already exists.
 
@@ -91,8 +86,10 @@ metadata, including image alt text. The current local social-image paths and
 `og:url` are preview-safe relative URLs because no public domain was supplied.
 **Once the real domain/Pages URL is known**, change `og:url` to the absolute public
 page URL and `og:image`/`twitter:image` to the absolute URL of
-`assets/snipstik-social.jpg` in `index.html`. Add a canonical link for that same
-public URL if desired. Social crawlers read HTML and may not resolve relative
+`assets/snipstik-social.jpg` in **both `index.html` and `privacy.html`**. Use the
+homepage URL for the homepage and the deployed `/privacy.html` URL for privacy.
+Add a canonical link for each actual public URL if desired. Social crawlers read
+HTML and may not resolve relative
 image URLs; do this before sharing the public launch link. No invented domain or
 social handle is included.
 
@@ -130,8 +127,9 @@ Preview in a current browser at 320, 390, 768 and desktop widths. Check keyboard
 navigation/visible focus, reduced-motion preference, 200% text zoom, all anchors,
 and the three-step/reward/privacy text. In browser Network/Storage, confirm only
 local resources are loaded and no cookies/local storage are created. Test the
-default missing-form notice and then the configured Google Form URL on both CTAs.
-Also test the project-path deployment, not only a domain root. No dependencies or
+configured Google Form URL on both CTAs, Privacy navigation and the email contact.
+Check privacy/contact links with JavaScript disabled, too. Also test the
+project-path deployment, not only a domain root. No dependencies or
 test runner are required to ship this site.
 
 Cloud verification used the existing Chromium/Playwright tools, without adding any
@@ -145,6 +143,13 @@ text exceeds 9:1 on the primary surfaces. HTML/CSS/JS total about 22 KB before
 compression, plus the reused 34 KB UI icon; the social image is not loaded by the page.
 These are browser checks, not a claim of physical TikTok in-app-browser testing.
 
-Remaining launch inputs: real Google Form, real policy/contact links, final public
-URL for social metadata, and optionally the actual product demo. Do not add fake
+The publication pass also verified both actual beta CTA clicks open the configured
+Google Form URL, same-tab privacy navigation, email links, both pages under a
+project path, no-JavaScript privacy/contact navigation, responsive layout and no
+third-party startup requests. The form navigation was intercepted during browser
+checks to verify its exact destination without submitting tester information;
+the Google Form's availability and enrollment settings need an owner check.
+
+Remaining deployment inputs: final public URL for social metadata, review of the
+Google Form's enrollment settings, and optionally the actual product demo. Do not add fake
 testimonials, launch claims, analytics or monetization to fill those gaps.

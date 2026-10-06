@@ -1,19 +1,20 @@
 "use strict";
 
-// Public outbound links only. Replace BETA_FORM_URL here; never put secrets here.
+// Public links only. Configure the beta form here; never put secrets here.
 const SITE_CONFIG = Object.freeze({
-  betaFormUrl: "BETA_FORM_URL",
-  privacyUrl: "", // Full Privacy Policy URL when available (https).
-  contactUrl: "", // Contact page (https) or mailto address when supplied.
+  betaFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSfAadJP1xt-i1OqV0ImKfK46w0DegLddaJQHyfiLhs2m8fxMQ/viewform?usp=publish-editor",
+  privacyUrl: "./privacy.html",
+  contactUrl: "mailto:servinsystems@gmail.com",
 });
 
-function configuredUrl(value, allowEmail = false) {
+function configuredUrl(value, allowEmail = false, allowLocal = false) {
   if (!value) return null;
   try {
-    const url = new URL(value);
+    const url = new URL(value, allowLocal ? document.baseURI : undefined);
+    if (allowLocal && value.startsWith("./") && url.origin === window.location.origin) return url;
     if (url.protocol === "https:" || (allowEmail && url.protocol === "mailto:")) return url;
   } catch {
-    // Keep the readable in-page placeholder when configuration is missing/invalid.
+    // Preserve the HTML fallback when configuration is missing/invalid.
   }
   return null;
 }
@@ -22,7 +23,7 @@ function applyLinks(selector, url) {
   if (!url) return;
   document.querySelectorAll(selector).forEach((link) => {
     link.href = url.href;
-    if (url.protocol === "https:") {
+    if (url.protocol === "https:" && url.origin !== window.location.origin) {
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.setAttribute("aria-label", `${link.textContent.trim()} (opens in a new tab)`);
@@ -36,9 +37,7 @@ if (betaUrl) {
   document.getElementById("signup-status").textContent = "Opens the beta signup form in a new tab. Nothing is submitted on this website.";
 }
 
-const privacyUrl = configuredUrl(SITE_CONFIG.privacyUrl);
+const privacyUrl = configuredUrl(SITE_CONFIG.privacyUrl, false, true);
 const contactUrl = configuredUrl(SITE_CONFIG.contactUrl, true);
 applyLinks("[data-privacy-link]", privacyUrl);
 applyLinks("[data-contact-link]", contactUrl);
-if (privacyUrl) document.querySelector("[data-privacy-placeholder]").hidden = true;
-if (contactUrl) document.querySelector("[data-contact-placeholder]").hidden = true;
