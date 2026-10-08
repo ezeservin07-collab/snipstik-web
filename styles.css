@@ -145,3 +145,68 @@ h3 { font-size: 24px; letter-spacing: -.6px; line-height: 1.2; margin-bottom: 12
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Closed-beta guidance reuses the existing SnipStik surfaces and violet accent. */
+button, input { font: inherit; }
+button:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--violet-light); outline-offset: 5px; border-radius: 6px;
+}
+.hero-description { color: var(--muted); max-width: 36ch; margin-bottom: 22px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
+.hero-actions .small-link { font-size: 14px; }
+.reward-preview { margin-top: 24px; padding: 18px 20px; background: #cdb4ff08; border: 1px solid #49315f; border-radius: 16px; }
+.reward-preview h2 { font-size: 16px; letter-spacing: 0; margin-bottom: 8px; }
+.reward-preview p { font-size: 14px; color: var(--muted); margin-bottom: 0; }
+.reward-preview .small-link { font-size: 13px; }
+.section-intro { max-width: 65ch; color: var(--muted); }
+.start-here { margin-bottom: 24px; padding: 22px 24px; background: #21162e; border: 1px solid #49315f; border-radius: 20px; }
+.start-here h3 { font-size: 20px; letter-spacing: -.3px; }
+.start-here p { margin-bottom: 10px; }
+.start-here p:last-child { margin-bottom: 0; }
+.muted-copy { font-size: 14px; color: var(--muted); }
+.join-layout { display: grid; gap: 24px; align-items: start; }
+.join-layout > *, .join-step > * { min-width: 0; }
+.join-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.join-step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding: 24px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; }
+.join-number { display: grid; place-items: center; align-self: start; width: 34px; height: 34px; border-radius: 10px; background: #cdb4ff12; color: var(--violet-light); font-size: 13px; font-weight: 650; }
+.join-step h3 { font-size: 20px; letter-spacing: -.3px; margin: 4px 0 10px; }
+.join-step p { font-size: 15px; color: var(--muted); margin-bottom: 18px; }
+.join-step .button { padding: 13px 18px; min-height: 48px; font-size: 14px; }
+.button-secondary { border-color: #635774; background: #ffffff04; }
+.button-secondary:hover { border-color: var(--violet-light); background: #cdb4ff12; }
+.access-help { padding: 22px; margin-top: 20px; border: 1px solid var(--line); border-radius: 20px; }
+.access-help h3 { font-size: 18px; letter-spacing: -.3px; }
+.access-help p { color: var(--muted); font-size: 14px; margin-bottom: 0; }
+.access-help a, .faq-list a { color: var(--violet-light); text-decoration: underline; text-underline-offset: 4px; }
+.checklist-card { padding: 26px 22px; background: var(--surface); border: 1px solid #49315f; border-radius: 20px; }
+.checklist-card h3 { font-size: 22px; }
+.checklist-status { color: var(--violet-light); font-weight: 650; margin-bottom: 10px; }
+progress { display: block; width: 100%; height: 8px; margin-bottom: 18px; border: 0; border-radius: 5px; overflow: hidden; appearance: none; background: var(--line); accent-color: var(--violet); }
+progress::-webkit-progress-bar { background: var(--line); }
+progress::-webkit-progress-value { background: var(--violet); }
+progress::-moz-progress-bar { background: var(--violet); }
+.checklist-card fieldset { padding: 0; margin: 0; border: 0; min-width: 0; }
+.checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; min-height: 48px; cursor: pointer; font-size: 14px; }
+.checklist-item input { flex: 0 0 20px; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--violet); cursor: pointer; }
+.text-button { cursor: pointer; min-height: 44px; padding: 8px 0; border: 0; background: transparent; color: var(--violet-light); font-size: 13px; text-decoration: underline; text-underline-offset: 4px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.spanish-help { margin-top: 24px; }
+.spanish-help, .faq-list details { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+summary { cursor: pointer; padding: 18px 22px; min-height: 56px; font-size: 16px; font-weight: 600; }
+summary::marker { color: var(--violet-light); }
+.spanish-help > div, .faq-list details > div { padding: 0 22px 20px; color: var(--muted); font-size: 15px; }
+.spanish-help ol { padding-left: 22px; }
+.spanish-help li { margin-bottom: 8px; }
+.spanish-help p, .faq-list p { margin-bottom: 0; }
+.faq-list { display: grid; gap: 12px; }
+@media (min-width: 960px) {
+  .join-layout { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px; }
+}
+@media (max-width: 380px) {
+  .join-step { padding: 20px 16px; gap: 10px; }
+  .join-step .button { width: 100%; padding-inline: 10px; }
+}
+/* Long email addresses must remain readable at large text sizes. */
+.footer-right { min-width: 0; max-width: min(40ch, 100%); }
+.site-footer nav { flex-wrap: wrap; }
+.site-footer nav a { min-width: 0; overflow-wrap: anywhere; }

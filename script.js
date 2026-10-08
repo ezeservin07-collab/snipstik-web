@@ -1,8 +1,11 @@
 "use strict";
 
-// Public links only. Configure the beta form here; never put secrets here.
+// Public links only. Keep native HTML hrefs in sync for visitors without JavaScript.
 const SITE_CONFIG = Object.freeze({
   betaFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSfAadJP1xt-i1OqV0ImKfK46w0DegLddaJQHyfiLhs2m8fxMQ/viewform?usp=publish-editor",
+  groupUrl: "https://groups.google.com/g/snipstik-beta-testers",
+  testingUrl: "https://play.google.com/apps/testing/tech.servinsystems.snipstik",
+  storeUrl: "https://play.google.com/store/apps/details?id=tech.servinsystems.snipstik",
   privacyUrl: "./privacy.html",
   contactUrl: "mailto:servinsystems@gmail.com",
 });
@@ -31,13 +34,67 @@ function applyLinks(selector, url) {
   });
 }
 
-const betaUrl = configuredUrl(SITE_CONFIG.betaFormUrl);
-applyLinks("[data-beta-link]", betaUrl);
-if (betaUrl) {
-  document.getElementById("signup-status").textContent = "Opens the beta signup form in a new tab. Nothing is submitted on this website.";
+for (const [name, key] of [
+  ["beta", "betaFormUrl"], ["group", "groupUrl"],
+  ["testing", "testingUrl"], ["store", "storeUrl"],
+]) {
+  applyLinks(`[data-${name}-link]`, configuredUrl(SITE_CONFIG[key]));
 }
+applyLinks("[data-privacy-link]", configuredUrl(SITE_CONFIG.privacyUrl, false, true));
+applyLinks("[data-contact-link]", configuredUrl(SITE_CONFIG.contactUrl, true));
 
-const privacyUrl = configuredUrl(SITE_CONFIG.privacyUrl, false, true);
-const contactUrl = configuredUrl(SITE_CONFIG.contactUrl, true);
-applyLinks("[data-privacy-link]", privacyUrl);
-applyLinks("[data-contact-link]", contactUrl);
+// Manual, local-only reminders. Link clicks never mark a step complete.
+const CHECKLIST_STORAGE_KEY = "snipstik.betaChecklist.v1";
+const checklist = document.getElementById("beta-checklist");
+if (checklist) {
+  const inputs = [...checklist.querySelectorAll('input[name="beta-step"]')];
+  const note = document.getElementById("checklist-storage-note");
+  const savedNote = note.textContent;
+  function storageUnavailable() {
+    note.textContent = "Your browser couldn’t save progress. The checklist still works on this page; no signup information is stored.";
+  }
+  function renderProgress() {
+    const completed = inputs.filter((input) => input.checked).length;
+    document.getElementById("checklist-progress").textContent = `${completed}/${inputs.length} completed`;
+    document.getElementById("beta-progress").value = completed;
+  }
+  let stored = null;
+  try {
+    stored = localStorage.getItem(CHECKLIST_STORAGE_KEY);
+  } catch {
+    storageUnavailable();
+  }
+  if (stored !== null) {
+    try {
+      const saved = JSON.parse(stored);
+      // Ignore malformed/outdated state. Never insert stored strings into HTML.
+      if (Array.isArray(saved) && saved.length === inputs.length && saved.every((value) => typeof value === "boolean")) {
+        inputs.forEach((input, index) => { input.checked = saved[index]; });
+      }
+    } catch {
+      // Invalid stored JSON is not a browser storage failure.
+    }
+  }
+  checklist.addEventListener("change", (event) => {
+    if (!inputs.includes(event.target)) return;
+    renderProgress();
+    try {
+      localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(inputs.map((input) => input.checked)));
+      note.textContent = savedNote;
+    } catch {
+      storageUnavailable();
+    }
+  });
+  document.getElementById("reset-checklist").addEventListener("click", () => {
+    inputs.forEach((input) => { input.checked = false; });
+    renderProgress();
+    try {
+      localStorage.removeItem(CHECKLIST_STORAGE_KEY);
+      note.textContent = savedNote;
+    } catch {
+      storageUnavailable();
+    }
+  });
+  renderProgress();
+  checklist.hidden = false;
+}

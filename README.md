@@ -1,155 +1,158 @@
 # SnipStik website
 
-The public product site for **SnipStik**, by **Servin Systems**. Its current call to
-action recruits Android beta testers. This is a plain static site, not a beta-only
-application: the content and CTA can evolve into the permanent product site.
+The public product site for **SnipStik**, by **Servin Systems**:
+**https://snipstik-web.snipstik.workers.dev**.
 
-No framework, npm, build step, backend, forms database, analytics, trackers, cookies,
-external fonts or runtime dependencies. HTML/CSS render the content; the small local
-JavaScript file applies public outbound-link configuration. No information is
-submitted on this site.
+Plain HTML, CSS and a small vanilla JavaScript file. No framework, npm, build step,
+backend, analytics, trackers, cookies, external fonts or runtime dependencies.
+The current goal is Android closed-beta recruitment; the structure remains a
+permanent product site rather than a beta-specific application.
 
 ## Files
 
-- `index.html`: semantic page, product/demo placeholder, beta/reward/privacy copy
-  and social metadata.
-- `styles.css`: responsive dark-first design, fixed violet accents, system fonts,
+- `index.html`: product hero, five-step beta access guide, optional checklist,
+  Spanish help, product walkthrough placeholder, FAQ, approved reward terms,
+  privacy summary and social metadata.
+- `styles.css`: existing dark/violet identity, responsive cards, touch targets,
   keyboard focus and reduced-motion support.
-- `script.js`: **the single configuration point for the beta form URL**, plus
-  Privacy Policy/contact link configuration. No network calls or persistent storage.
-- `privacy.html`: on-device processing, Google Forms beta information, contact
-  and deletion requests, using the shared site styles.
+- `script.js`: public `SITE_CONFIG` links and a local-only manual checklist.
+- `privacy.html`: on-device processing, beta data, checklist storage, Google
+  services, contact and deletion requests.
 - `.nojekyll`: direct static hosting on GitHub Pages.
-- `assets/`: approved SnipStik icon, favicon, Apple touch icon and social artwork.
+- `assets/`: approved icon, favicon, Apple touch icon and social artwork.
 
 ## Local preview
 
-From the repository root, using Python 3:
+From the repository root:
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Open `http://localhost:8000`. Stop the server with Ctrl+C. Opening `index.html`
-directly also works. Python is only a preview convenience, never a deploy requirement.
+Open `http://localhost:8000`. Stop with Ctrl+C. Python is only a preview
+convenience, never a deployment requirement. All content and access links work
+without JavaScript; JavaScript enables the optional checklist.
 
-## Configure signup and utility links
+## Beta flow and public links
 
-The supplied SnipStik Google Form is configured in **`SITE_CONFIG.betaFormUrl`
-at the top of `script.js`**. To change it, replace that value with the new HTTPS
-form URL. Both “Join the Android Beta” and “Join the Beta” use this one setting and
-open the form in a new tab with `noopener noreferrer`. There is no fake backend
-form. This website does not submit or store responses; configure and administer
-the Google Form separately. Invalid or missing configuration keeps the in-page
-fallback instead of opening an unsafe URL.
+Keep these destinations in **`SITE_CONFIG` at the top of `script.js`**:
 
-Privacy links point to **`./privacy.html`**, and Contact uses
-**`mailto:servinsystems@gmail.com`**. These native links also work without
-JavaScript and under a GitHub Pages project path. If changing these destinations,
-update the configuration and the matching HTML links in both pages so the
-no-JavaScript fallback stays correct. These values are public; **never put
-credentials or private values in this file**. The configured beta CTAs require
-JavaScript; a noscript explanation is included.
+| Setting | Purpose |
+| --- | --- |
+| `betaFormUrl` | Google Form: collect beta interest/device information |
+| `groupUrl` | Google Group: the visitor joins the tester group |
+| `testingUrl` | Google Play testing page: the visitor opts in |
+| `storeUrl` | Play Store listing: install/open after opting in |
+| `privacyUrl` | Local `./privacy.html` page |
+| `contactUrl` | `mailto:servinsystems@gmail.com` |
 
-Before opening testing, make sure the signup form explains the actual required
-testing period and feedback process, and review that
-the reward terms match your program. Pro is explicitly a future offering; this
-page makes no claim that Pro or a Play Store public launch already exists.
+The access order is **Form → Group → Google Play opt-in → Install → Feedback**.
+Visitors need the same Google account for the group and Play. Membership can take
+a moment to appear: join the group, wait briefly and reopen the testing link.
+Submitting the form does **not** automatically enroll a tester. This site does
+not change Google Forms, Google Groups or Play Console configuration.
 
-## Cloudflare Pages
+Native HTML `href` values deliberately contain the same real destinations so the
+flow also works without JavaScript. When changing a URL, update its configuration
+and matching HTML fallbacks. External HTTPS links open in a new tab with
+`noopener noreferrer`; email opens the user's mail app. Invalid configuration
+preserves the native fallback. Never put secrets in these public files.
 
-1. Connect `ezeservin07-collab/snipstik-web` using Pages' Git integration.
-2. Choose the branch you intend to publish (`main` currently).
-3. Framework preset: **None**. Build command: **leave empty**.
-4. Build output directory: **`.`** (repository root). Root directory: leave empty.
-5. Deploy. Pages serves the static files; no Functions, bindings or backend needed.
+## Optional beta checklist
 
-Alternatively upload the repository-root static files through Pages Direct Upload.
-Do not upload `.git` or private local files. A custom domain is optional.
+Visitors manually mark five completed steps. Clicking an outbound link never
+marks a step or pretends to verify enrollment. The key
+**`snipstik.betaChecklist.v1`** in `localStorage` contains only five booleans,
+not email, device data or form responses. Progress is never transmitted.
+
+State persists in that browser across reloads. **Reset checklist** clears the
+saved key. Invalid saved data is ignored. If storage is blocked/full, the checklist
+continues working on the current page with an explanatory note. Without
+JavaScript it is hidden; the full access guide and links remain usable.
+
+The privacy page discloses this optional local storage. No cookies, session
+storage, analytics or background requests are introduced.
+
+## Cloudflare deployment
+
+This site is currently public at the Workers URL above. Keep the existing
+Cloudflare project and its repository integration; no new framework or server is
+needed. Deploy the repository-root static files using the project's existing
+Workers static-assets/Pages setup. A Git push does not by itself prove a
+Cloudflare deployment has succeeded: check the project's deployment status.
+
+For a new **Cloudflare Pages** project:
+
+1. Connect `ezeservin07-collab/snipstik-web`, branch `main`.
+2. Framework preset: **None**. Build command: **leave empty**.
+3. Build output directory: **`.`** (repository root). Root directory: leave empty.
+4. Deploy. No Functions, bindings or backend are required.
+
+Pages Direct Upload also works with the root static files. Never upload `.git`
+or private local files. A custom domain is optional.
 
 ## GitHub Pages
 
 1. Open repository **Settings → Pages**.
-2. Under Build and deployment select **Deploy from a branch**.
+2. Choose **Deploy from a branch**.
 3. Select **`main`** and **`/ (root)`**, then Save.
-4. Wait for GitHub's Pages deployment to finish and use the URL shown in Settings.
+4. Wait for deployment and use the URL shown in Settings.
 
-`.nojekyll` ensures direct static hosting. Assets/styles/scripts use relative URLs,
-so they also work at a project path such as `/snipstik-web/`. No Actions workflow,
-npm installation or build process is required. Publishing is separate from committing
-the site; repository visibility/account settings may affect Pages availability.
+`.nojekyll` enables direct static hosting. Styles, scripts, assets and privacy
+links are relative and work at `/snipstik-web/` as well as a domain root.
 
-## Domain and social previews
+## Canonical URL and social previews
 
-The head contains title/description/viewport/theme-color, Open Graph and Twitter
-metadata, including image alt text. The current local social-image paths and
-`og:url` are preview-safe relative URLs because no public domain was supplied.
-**Once the real domain/Pages URL is known**, change `og:url` to the absolute public
-page URL and `og:image`/`twitter:image` to the absolute URL of
-`assets/snipstik-social.jpg` in **both `index.html` and `privacy.html`**. Use the
-homepage URL for the homepage and the deployed `/privacy.html` URL for privacy.
-Add a canonical link for each actual public URL if desired. Social crawlers read
-HTML and may not resolve relative
-image URLs; do this before sharing the public launch link. No invented domain or
-social handle is included.
+Both HTML heads use the actual public URL for canonical/Open Graph page URLs and
+absolute URLs for `assets/snipstik-social.jpg`. Privacy has its own
+`/privacy.html` canonical. Title, description, viewport, theme-color, Open Graph,
+Twitter metadata and image alt text are included.
 
-## Product demo
+If the public domain changes, update both HTML heads: canonical, `og:url`,
+`og:image` and `twitter:image`. Do not invent a domain or social handle.
+
+## Product demo and approved branding
 
 Replace the marked **`figure.demo-panel` inner content in `index.html`** with a
-real short product video/poster. The current illustration is explicitly labeled
-as a placeholder, not a working player or a fabricated product screenshot.
+real short product video/poster when available. The current illustration is
+explicitly a placeholder, not a working player or fabricated screenshot.
+Prefer a small local MP4/WebM, compressed poster, `controls`, `playsinline` and
+`preload="none"`. Keep width fluid and reserve its aspect ratio. No autoplay or
+third-party player. Provide captions/transcript for meaningful audio.
 
-Prefer a small local MP4/WebM with a compressed poster, `controls`, `playsinline`
-and `preload="none"`. Keep the video's width fluid and give it an aspect ratio to
-avoid layout shift. Do not autoplay or embed a third-party player/tracker. Keep an
-accessible caption and supply captions/transcript for any meaningful audio. The
-landing page needs no video to load or function today.
+Approved assets remain unchanged:
 
-## Approved branding
-
-The approved artwork from the SnipStik Android project is already integrated:
-
-- `assets/snipstik-icon.png`: 192×192 PNG for the header/demo.
+- `assets/snipstik-icon.png`: 192×192 PNG for header/demo.
 - `assets/favicon.png`: 32×32 PNG.
 - `assets/apple-touch-icon.png`: 180×180 opaque PNG.
-- `assets/snipstik-social.jpg`: exact original approved 1280×1280 JPEG.
+- `assets/snipstik-social.jpg`: original approved 1280×1280 JPEG.
 
-The original attachment was JPEG despite being described as PNG. No replacement
-logo or font was invented. The UI icon reuses the approved Android raster with
-exterior black corners removed; the central violet/white artwork is preserved.
-For a future approved source asset, keep it under `assets/`, update these derived
-images and their HTML dimensions/references, and preserve proportions. Do not add
-a font service, icon library or a new logo approximation.
+The original attachment was JPEG despite being described as PNG. The UI icon
+reuses the approved Android raster with exterior black corners removed; its
+central violet/white artwork is preserved. No replacement logo, icon library or
+font service is needed.
 
-## Verification
+## Content and checks
 
-Preview in a current browser at 320, 390, 768 and desktop widths. Check keyboard
-navigation/visible focus, reduced-motion preference, 200% text zoom, all anchors,
-and the three-step/reward/privacy text. In browser Network/Storage, confirm only
-local resources are loaded and no cookies/local storage are created. Test the
-configured Google Form URL on both CTAs, Privacy navigation and the email contact.
-Check privacy/contact links with JavaScript disabled, too. Also test the
-project-path deployment, not only a domain root. No dependencies or
-test runner are required to ship this site.
+The full Founding Tester Reward section preserves the approved terms: first 30
+eligible completed testers, required full testing period, genuine testing,
+static/animated testing when supported and requested feedback. One reward per
+Google Play account, non-transferable, no positive review/public rating required,
+no reward guaranteed merely for joining. Pro remains a future offering.
 
-Cloud verification used the existing Chromium/Playwright tools, without adding any
-project dependencies: 320/360/390/412/768/1024/1440 px and simulated 200% text scaling
-had no horizontal overflow; no browser script errors, broken images or invalid
-in-page targets. All links were keyboard-reachable with visible focus. Reduced
-motion, no-JavaScript fallback, project-path hosting and both configured/missing/
-unsafe signup URL cases passed. Initial requests were local-only and no cookies or
-local/session storage were created. Main action contrast is 4.54:1; body/support
-text exceeds 9:1 on the primary surfaces. HTML/CSS/JS total about 22 KB before
-compression, plus the reused 34 KB UI icon; the social image is not loaded by the page.
-These are browser checks, not a claim of physical TikTok in-app-browser testing.
+Preview both pages at 320, 390, 768 and 1440 px, plus 200% text size. Check:
 
-The publication pass also verified both actual beta CTA clicks open the configured
-Google Form URL, same-tab privacy navigation, email links, both pages under a
-project path, no-JavaScript privacy/contact navigation, responsive layout and no
-third-party startup requests. The form navigation was intercepted during browser
-checks to verify its exact destination without submitting tester information;
-the Google Form's availability and enrollment settings need an owner check.
+- no horizontal overflow, readable cards and early primary CTA;
+- keyboard access, visible focus and reduced-motion behavior;
+- all five access-step destinations, FAQ, Spanish help and privacy/contact links;
+- checklist 0/5 → checked steps → reload → Reset, blocked storage and invalid data;
+- no JavaScript errors, missing images, invalid anchors or third-party startup requests;
+- native links without JavaScript and hosting under a project path.
 
-Remaining deployment inputs: final public URL for social metadata, review of the
-Google Form's enrollment settings, and optionally the actual product demo. Do not add fake
-testimonials, launch claims, analytics or monetization to fill those gaps.
+Cloud browser tests verify destinations without submitting a form or joining any
+group. Google's availability, account eligibility and membership propagation
+must also be checked with a real tester account. Mobile browser checks are not a
+claim of physical TikTok in-app-browser testing. After deployment, open the public
+site and follow the flow on Android; confirm that the existing Google Group and
+Play Console enrollment settings match it. No store configuration is changed by
+this repository.
