@@ -210,3 +210,23 @@ summary::marker { color: var(--violet-light); }
 .footer-right { min-width: 0; max-width: min(40ch, 100%); }
 .site-footer nav { flex-wrap: wrap; }
 .site-footer nav a { min-width: 0; overflow-wrap: anywhere; }
+
+/* Put access before the optional demo and reward form. */
+.hero { grid-template-columns: minmax(0, 1fr); padding-bottom: 24px; }
+.hero-copy { max-width: 650px; }
+.hero-actions { align-items: flex-start; }
+.hero-primary-action { min-width: 0; }
+#beta .section-intro { color: var(--text); }
+#beta .spanish-help { margin: 0 0 18px; }
+.tiktok-steps { margin: 0; padding-left: 22px; color: var(--muted); font-size: 14px; }
+.access-help ol { padding-left: 22px; margin-bottom: 0; color: var(--muted); font-size: 14px; }
+.access-help li { margin-bottom: 8px; }
+.reward-form-section { padding-top: 12px; }
+.reward-form-section .reward-preview { margin-top: 0; padding: 26px; }
+.reward-form-section h2 { font-size: clamp(24px, 4vw, 32px); letter-spacing: -.6px; }
+.reward-form-section p { max-width: 65ch; margin-bottom: 16px; }
+.reward-form-section .button { margin-right: 18px; }
+.product-demo { max-width: 520px; margin-top: 28px; }
+@media (max-width: 380px) {
+  .hero-primary-action { width: 100%; }
+}

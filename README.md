@@ -10,7 +10,7 @@ permanent product site rather than a beta-specific application.
 
 ## Files
 
-- `index.html`: product hero, five-step beta access guide, optional checklist,
+- `index.html`: product hero, three-step beta access guide and a post-install tester form, optional checklist,
   Spanish help, product walkthrough placeholder, FAQ, approved reward terms,
   privacy summary and social metadata.
 - `styles.css`: existing dark/violet identity, responsive cards, touch targets,
@@ -39,14 +39,18 @@ Keep these destinations in **`SITE_CONFIG` at the top of `script.js`**:
 
 | Setting | Purpose |
 | --- | --- |
-| `betaFormUrl` | Google Form: collect beta interest/device information |
+| `betaFormUrl` | Google Form: tester information/feedback after installation |
 | `groupUrl` | Google Group: the visitor joins the tester group |
 | `testingUrl` | Google Play testing page: the visitor opts in |
 | `storeUrl` | Play Store listing: install/open after opting in |
 | `privacyUrl` | Local `./privacy.html` page |
 | `contactUrl` | `mailto:servinsystems@gmail.com` |
 
-The access order is **Form → Group → Google Play opt-in → Install → Feedback**.
+The access order is **Group → Google Play beta → Install → Tester form / Feedback**.
+The hero’s **Join SnipStik Beta** scrolls to the three-step access section; it
+does not open the form. **How it works** opens the product walkthrough section.
+The form appears after installation under **Want the Founding Tester reward?**,
+with **Claim Founding Tester Spot**. Submitting it does not guarantee a reward.
 Visitors need the same Google account for the group and Play. Membership can take
 a moment to appear: join the group, wait briefly and reopen the testing link.
 Submitting the form does **not** automatically enroll a tester. This site does
@@ -60,15 +64,22 @@ preserves the native fallback. Never put secrets in these public files.
 
 ## Optional beta checklist
 
-Visitors manually mark five completed steps. Clicking an outbound link never
+Visitors manually mark six completed steps: joined group, joined Play beta,
+installed, tested static, tested animated, and sent feedback/tester form. Clicking an outbound link never
 marks a step or pretends to verify enrollment. The key
-**`snipstik.betaChecklist.v1`** in `localStorage` contains only five booleans,
+**`snipstik.betaChecklist.v2`** in `localStorage` contains only six booleans,
 not email, device data or form responses. Progress is never transmitted.
 
 State persists in that browser across reloads. **Reset checklist** clears the
-saved key. Invalid saved data is ignored. If storage is blocked/full, the checklist
+saved current and legacy keys. Invalid saved data is ignored. If storage is blocked/full, the checklist
 continues working on the current page with an explanatory note. Without
 JavaScript it is hidden; the full access guide and links remain usable.
+
+Valid legacy `snipstik.betaChecklist.v1` state migrates only when v2 is absent:
+group, installation and submitted form are retained. The old “opened testing page”
+and “ready to test” checks cannot prove beta membership or sticker testing, so
+those new steps start unchecked. Migration saves v2 before removing v1. Existing
+v2 takes priority. Failed storage does not break current-page progress.
 
 The privacy page discloses this optional local storage. No cookies, session
 storage, analytics or background requests are introduced.
@@ -144,8 +155,8 @@ Preview both pages at 320, 390, 768 and 1440 px, plus 200% text size. Check:
 
 - no horizontal overflow, readable cards and early primary CTA;
 - keyboard access, visible focus and reduced-motion behavior;
-- all five access-step destinations, FAQ, Spanish help and privacy/contact links;
-- checklist 0/5 → checked steps → reload → Reset, blocked storage and invalid data;
+- all three access-step destinations and the post-install form, FAQ, Spanish help and privacy/contact links;
+- checklist 0/6 → checked steps → reload → Reset, legacy migration, blocked storage and invalid data;
 - no JavaScript errors, missing images, invalid anchors or third-party startup requests;
 - native links without JavaScript and hosting under a project path.
 
