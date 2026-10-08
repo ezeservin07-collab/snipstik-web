@@ -29,7 +29,7 @@ function applyLinks(selector, url) {
     if (url.protocol === "https:" && url.origin !== window.location.origin) {
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.setAttribute("aria-label", `${link.textContent.trim()} (opens in a new tab)`);
+      link.setAttribute("aria-label", `${link.textContent.trim()} (se abre en una pestaña nueva)`);
     }
   });
 }
@@ -62,11 +62,11 @@ if (checklist) {
   const note = document.getElementById("checklist-storage-note");
   const savedNote = note.textContent;
   function storageUnavailable() {
-    note.textContent = "Your browser couldn’t save progress. The checklist still works on this page; no signup information is stored.";
+    note.textContent = "Tu navegador no pudo guardar el progreso. La lista sigue funcionando en esta página; no almacena datos del formulario.";
   }
   function renderProgress() {
     const completed = inputs.filter((input) => input.checked).length;
-    document.getElementById("checklist-progress").textContent = `${completed}/${inputs.length} completed`;
+    document.getElementById("checklist-progress").textContent = `${completed} de ${inputs.length} completados`;
     document.getElementById("beta-progress").value = completed;
   }
   let saved = null;

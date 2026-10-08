@@ -5,13 +5,16 @@ The public product site for **SnipStik**, by **Servin Systems**:
 
 Plain HTML, CSS and a small vanilla JavaScript file. No framework, npm, build step,
 backend, analytics, trackers, cookies, external fonts or runtime dependencies.
+The landing and privacy page are primarily in Latin American Spanish, including
+metadata, accessible labels and JavaScript messages. The redundant Spanish-help
+accordion is removed; no language switch or new dependencies are introduced.
 The current goal is Android closed-beta recruitment; the structure remains a
 permanent product site rather than a beta-specific application.
 
 ## Files
 
 - `index.html`: product hero, three-step beta access guide and a post-install tester form, optional checklist,
-  Spanish help, product walkthrough placeholder, FAQ, approved reward terms,
+  Spanish content, product walkthrough placeholder, FAQ, approved reward terms,
   privacy summary and social metadata.
 - `styles.css`: existing dark/violet identity, responsive cards, touch targets,
   keyboard focus and reduced-motion support.
@@ -47,10 +50,10 @@ Keep these destinations in **`SITE_CONFIG` at the top of `script.js`**:
 | `contactUrl` | `mailto:servinsystems@gmail.com` |
 
 The access order is **Group → Google Play beta → Install → Tester form / Feedback**.
-The hero’s **Join SnipStik Beta** scrolls to the three-step access section; it
-does not open the form. **How it works** opens the product walkthrough section.
-The form appears after installation under **Want the Founding Tester reward?**,
-with **Claim Founding Tester Spot**. Submitting it does not guarantee a reward.
+The hero’s **Unirme a la beta** scrolls to the three-step access section; it
+does not open the form. **Cómo funciona** opens the product walkthrough section.
+The form appears after installation under **¿Querés la recompensa de Founding Tester?**,
+with **Solicitar lugar como Founding Tester**. Submitting it does not guarantee a reward.
 Visitors need the same Google account for the group and Play. Membership can take
 a moment to appear: join the group, wait briefly and reopen the testing link.
 Submitting the form does **not** automatically enroll a tester. This site does
@@ -70,7 +73,7 @@ marks a step or pretends to verify enrollment. The key
 **`snipstik.betaChecklist.v2`** in `localStorage` contains only six booleans,
 not email, device data or form responses. Progress is never transmitted.
 
-State persists in that browser across reloads. **Reset checklist** clears the
+State persists in that browser across reloads. **Reiniciar lista** clears the
 saved current and legacy keys. Invalid saved data is ignored. If storage is blocked/full, the checklist
 continues working on the current page with an explanatory note. Without
 JavaScript it is hidden; the full access guide and links remain usable.
@@ -155,8 +158,8 @@ Preview both pages at 320, 390, 768 and 1440 px, plus 200% text size. Check:
 
 - no horizontal overflow, readable cards and early primary CTA;
 - keyboard access, visible focus and reduced-motion behavior;
-- all three access-step destinations and the post-install form, FAQ, Spanish help and privacy/contact links;
-- checklist 0/6 → checked steps → reload → Reset, legacy migration, blocked storage and invalid data;
+- all three access-step destinations and the post-install form, Spanish FAQ, metadata, accessible labels and privacy/contact links;
+- checklist “0 de 6 completados” → checked steps → reload → Reset, legacy migration, blocked storage and invalid data;
 - no JavaScript errors, missing images, invalid anchors or third-party startup requests;
 - native links without JavaScript and hosting under a project path.
 
